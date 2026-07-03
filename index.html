@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>denis.cloudepro</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <div class="topbar__logo">Personal<span>gram</span></div>
+    <div class="topbar__search">
+      <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/></svg>
+      <input type="text" placeholder="Поиск" disabled>
+    </div>
+    <nav class="topbar__icons">
+      <button title="Главная" aria-label="Главная">
+        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3z"/></svg>
+      </button>
+      <button title="Сообщения" aria-label="Сообщения">
+        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 2C6.48 2 2 6.02 2 11c0 2.61 1.28 4.94 3.29 6.53L4 22l4.72-1.51C10 20.82 11 21 12 21c5.52 0 10-4.02 10-9S17.52 2 12 2z"/></svg>
+      </button>
+      <button title="Профиль" aria-label="Профиль" class="topbar__avatar">
+        <span>D</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main class="profile-page">
+
+  <section class="profile-header">
+    <div class="profile-header__avatar">
+      <span>D</span>
+    </div>
+    <div class="profile-header__info">
+      <div class="profile-header__row">
+        <h1 class="profile-header__username">denis.cloudepro</h1>
+        <div class="profile-header__actions">
+          <button class="btn btn--outline">Редактировать профиль</button>
+          <button class="btn btn--icon" aria-label="Настройки">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M19.14 12.94a7.14 7.14 0 0 0 .06-.94 7.14 7.14 0 0 0-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.3 7.3 0 0 0-1.63-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.14.56-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.84a.5.5 0 0 0 .12.64L4.86 11.06c-.04.3-.06.62-.06.94s.02.64.06.94L2.83 14.52a.5.5 0 0 0-.12.64l1.92 3.32c.14.24.42.34.66.22l2.39-.96c.5.38 1.04.7 1.63.94l.36 2.54c.05.25.26.42.5.42h3.84c.24 0 .45-.17.5-.42l.36-2.54c.59-.24 1.14-.56 1.63-.94l2.39.96c.24.1.52 0 .66-.22l1.92-3.32a.5.5 0 0 0-.12-.64zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <ul class="profile-header__stats">
+        <li><strong id="postsCount">0</strong> публикаций</li>
+        <li><strong>1 248</strong> подписчиков</li>
+        <li><strong>512</strong> подписок</li>
+      </ul>
+
+      <div class="profile-header__bio">
+        <p class="profile-header__fullname">Денис</p>
+        <p>Разработчик · путешествия · кофе ☕</p>
+        <p>Личный сайт-визитка в стиле Instagram</p>
+        <a href="#" class="profile-header__link">denis-cloudepro.dev</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="stories">
+    <div class="stories__scroller" id="storiesScroller"></div>
+  </section>
+
+  <nav class="tabs">
+    <button class="tabs__item is-active" data-tab="posts">
+      <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>
+      ПУБЛИКАЦИИ
+    </button>
+    <button class="tabs__item" data-tab="reels">
+      <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M2 3h20v18H2zM7 3v18M17 3v18M2 9h5M17 9h5M2 15h5M17 15h5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+      REELS
+    </button>
+    <button class="tabs__item" data-tab="tagged">
+      <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 12c-4.42 0-8 2.24-8 5v3h16v-3c0-2.76-3.58-5-8-5z"/></svg>
+      ОТМЕТКИ
+    </button>
+  </nav>
+
+  <section class="grid" id="postsGrid"></section>
+  <p class="grid__empty" id="gridEmpty" hidden>Здесь пока ничего нет</p>
+
+</main>
+
+<div class="modal" id="postModal" hidden>
+  <div class="modal__backdrop" id="modalBackdrop"></div>
+  <div class="modal__content">
+    <button class="modal__close" id="modalClose" aria-label="Закрыть">&times;</button>
+    <div class="modal__media" id="modalMedia"></div>
+    <div class="modal__side">
+      <div class="modal__header">
+        <div class="modal__avatar"><span>D</span></div>
+        <strong>denis.cloudepro</strong>
+      </div>
+      <div class="modal__caption" id="modalCaption"></div>
+      <div class="modal__meta">
+        <div class="modal__likes"><span id="modalLikes"></span> отметок «Нравится»</div>
+        <div class="modal__date" id="modalDate"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="bottomnav">
+  <button aria-label="Главная">
+    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3z"/></svg>
+  </button>
+  <button aria-label="Поиск">
+    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/></svg>
+  </button>
+  <button aria-label="Создать">
+    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"/></svg>
+  </button>
+  <button aria-label="Профиль" class="bottomnav__avatar"><span>D</span></button>
+</nav>
+
+<script src="assets/js/script.js"></script>
+</body>
+</html>
