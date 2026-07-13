@@ -78,6 +78,23 @@ const travelStats = document.getElementById("travelStats");
 const travelMap = document.getElementById("travelMap");
 const travelLegend = document.getElementById("travelLegend");
 const travelTooltip = document.getElementById("travelTooltip");
+const travelPopover = document.getElementById("travelPopover");
+
+const TRAVEL_STORAGE_KEY = "personalgram-travel-data";
+
+function loadTravelData() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(TRAVEL_STORAGE_KEY));
+    if (saved && typeof saved === "object") return { ...TRAVEL_DATA, ...saved };
+  } catch (e) { /* localStorage недоступен или данные повреждены — используем дефолт */ }
+  return { ...TRAVEL_DATA };
+}
+
+function saveTravelData() {
+  try { localStorage.setItem(TRAVEL_STORAGE_KEY, JSON.stringify(travelData)); } catch (e) { /* игнорируем */ }
+}
+
+let travelData = loadTravelData();
 
 function renderStories() {
   storiesScroller.innerHTML = STORIES.map(s => `
@@ -231,48 +248,100 @@ function renderTravel() {
 
   travelMap.innerHTML = `<svg viewBox="0 0 1010 666" xmlns="http://www.w3.org/2000/svg">${WORLD_MAP_PATHS}</svg>`;
 
-  const paths = travelMap.querySelectorAll("path");
-  let visitedCount = 0;
-  let wantCount = 0;
-
-  paths.forEach(path => {
-    const status = TRAVEL_DATA[path.id] || "none";
-    path.classList.add(`travel-status--${status}`);
-    if (status === "lived" || status === "visited") visitedCount++;
-    if (status === "want") wantCount++;
-
+  travelMap.querySelectorAll("path").forEach(path => {
+    path.addEventListener("mouseenter", () => showTravelTooltip(path));
+    path.addEventListener("mouseleave", () => { travelTooltip.hidden = true; });
     path.addEventListener("click", e => {
       e.stopPropagation();
-      showTravelTooltip(path);
+      travelTooltip.hidden = true;
+      openTravelPopover(path);
     });
   });
 
-  document.addEventListener("click", () => { travelTooltip.hidden = true; });
+  document.addEventListener("click", () => { travelPopover.hidden = true; });
+  travelPopover.addEventListener("click", e => e.stopPropagation());
 
+  travelLegend.innerHTML = Object.values(TRAVEL_STATUSES).map(s => `
+    <li><span class="travel__legend-dot" style="background:${s.color}"></span>${s.label}</li>
+  `).join("");
+
+  updateTravelColors();
+  updateTravelStats();
+}
+
+function statusOf(code) {
+  return travelData[code] || "none";
+}
+
+function updateTravelColors() {
+  travelMap.querySelectorAll("path").forEach(path => {
+    Object.keys(TRAVEL_STATUSES).forEach(key => path.classList.remove(`travel-status--${key}`));
+    path.classList.add(`travel-status--${statusOf(path.id)}`);
+  });
+}
+
+function updateTravelStats() {
+  const codes = Object.keys(travelData);
+  const visitedCount = codes.filter(c => travelData[c] === "lived" || travelData[c] === "visited").length;
+  const wantCount = codes.filter(c => travelData[c] === "want").length;
   const percent = Math.round((visitedCount / WORLD_COUNTRY_COUNT) * 100);
+
   travelStats.innerHTML = `
     <div class="travel__stat"><strong>${visitedCount}</strong><span>стран посещено</span></div>
     <div class="travel__stat"><strong>${percent}%</strong><span>от всего мира</span></div>
     <div class="travel__stat"><strong>${wantCount}</strong><span>хочу посетить</span></div>
   `;
+}
 
-  travelLegend.innerHTML = Object.values(TRAVEL_STATUSES).map(s => `
-    <li><span class="travel__legend-dot" style="background:${s.color}"></span>${s.label}</li>
-  `).join("");
+function positionFloatingEl(el, path) {
+  const wrapRect = travelMap.parentElement.getBoundingClientRect();
+  const pathRect = path.getBoundingClientRect();
+  el.style.left = (pathRect.left + pathRect.width / 2 - wrapRect.left) + "px";
+  el.style.top = (pathRect.top - wrapRect.top) + "px";
 }
 
 function showTravelTooltip(path) {
-  const status = TRAVEL_DATA[path.id] || "none";
   const name = path.getAttribute("aria-label") || path.id.toUpperCase();
-  const info = TRAVEL_STATUSES[status];
-
-  travelTooltip.innerHTML = `<strong>${name}</strong><span style="color:${info.color}">${info.label}</span>`;
-
-  const wrapRect = travelMap.parentElement.getBoundingClientRect();
-  const pathRect = path.getBoundingClientRect();
-  travelTooltip.style.left = (pathRect.left + pathRect.width / 2 - wrapRect.left) + "px";
-  travelTooltip.style.top = (pathRect.top - wrapRect.top) + "px";
+  travelTooltip.textContent = name;
+  positionFloatingEl(travelTooltip, path);
   travelTooltip.hidden = false;
+}
+
+function openTravelPopover(path) {
+  const name = path.getAttribute("aria-label") || path.id.toUpperCase();
+  const current = statusOf(path.id);
+
+  travelPopover.innerHTML = `
+    <div class="travel__popover-title">${name}</div>
+    <ul class="travel__popover-list">
+      ${Object.entries(TRAVEL_STATUSES).map(([key, s]) => `
+        <li>
+          <button type="button" class="travel__popover-option${key === current ? " is-selected" : ""}" data-status="${key}">
+            <span class="travel__legend-dot" style="background:${s.color}"></span>
+            ${s.label}
+          </button>
+        </li>
+      `).join("")}
+    </ul>
+  `;
+
+  travelPopover.querySelectorAll(".travel__popover-option").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const status = btn.dataset.status;
+      if (status === "none") {
+        delete travelData[path.id];
+      } else {
+        travelData[path.id] = status;
+      }
+      saveTravelData();
+      updateTravelColors();
+      updateTravelStats();
+      travelPopover.hidden = true;
+    });
+  });
+
+  positionFloatingEl(travelPopover, path);
+  travelPopover.hidden = false;
 }
 
 // Modal

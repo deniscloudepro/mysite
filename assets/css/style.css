@@ -650,19 +650,64 @@ a { color: inherit; text-decoration: none; }
   transform: translate(-50%, -100%) translateY(-8px);
   background: var(--text);
   color: #fff;
-  padding: 6px 10px;
+  padding: 5px 10px;
   border-radius: 6px;
   font-size: 12px;
-  line-height: 1.4;
+  font-weight: 600;
   white-space: nowrap;
   pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
   z-index: 2;
 }
 .travel__tooltip[hidden] {
   display: none;
+}
+
+.travel__popover {
+  position: absolute;
+  transform: translate(-50%, -100%) translateY(-8px);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  width: 210px;
+  z-index: 3;
+}
+.travel__popover[hidden] {
+  display: none;
+}
+.travel__popover-title {
+  font-weight: 700;
+  font-size: 13px;
+  padding: 6px 8px 8px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+.travel__popover-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+.travel__popover-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  padding: 7px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+}
+.travel__popover-option:hover {
+  background: var(--bg);
+}
+.travel__popover-option.is-selected {
+  background: rgba(var(--accent-rgb), 0.1);
+  font-weight: 600;
 }
 
 .travel__legend {
