@@ -86,6 +86,10 @@
       <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 2l2.2 6.8H21l-5.6 4.2 2.1 6.8-5.5-4.1-5.5 4.1 2.1-6.8L3 8.8h6.8z"/></svg>
       MY LIFE
     </button>
+    <button class="tabs__item" data-tab="travel">
+      <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2.5 1.8V22l3.5-1 3.5 1v-1.2L13 19v-5.5z"/></svg>
+      TRAVEL
+    </button>
   </nav>
 
   <section class="grid" id="postsGrid"></section>
@@ -101,6 +105,15 @@
       <div class="mylife__chart" id="mylifeChart"></div>
       <ul class="mylife__list" id="mylifeList"></ul>
     </div>
+  </section>
+
+  <section class="travel" id="travelSection" hidden>
+    <div class="travel__stats" id="travelStats"></div>
+    <div class="travel__map-wrap">
+      <div class="travel__map" id="travelMap"></div>
+      <div class="travel__tooltip" id="travelTooltip" hidden></div>
+    </div>
+    <ul class="travel__legend" id="travelLegend"></ul>
   </section>
 
 </main>
@@ -137,6 +150,7 @@
   <button aria-label="Профиль" class="bottomnav__avatar"><span>D</span></button>
 </nav>
 
+<script src="assets/js/world-map-data.js"></script>
 <script src="assets/js/script.js"></script>
 </body>
 </html>

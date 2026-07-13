@@ -14,7 +14,7 @@ const POSTS = [
 
 const STORIES = [
   { label: "Работа", emoji: "💻" },
-  { label: "Путешествия", emoji: "✈️" },
+  { label: "Путешествия", emoji: "✈️", tab: "travel" },
   { label: "Кофе", emoji: "☕" },
   { label: "Друзья", emoji: "👥" },
   { label: "Спорт", emoji: "🏃" },
@@ -42,6 +42,28 @@ const LIFE_AREAS = [
   { label: "Окружение", score: 7 },
 ];
 
+// Цветовая схема в стиле приложений-трекеров путешествий.
+const TRAVEL_STATUSES = {
+  lived:    { label: "Проживал",         color: "#4caf50" },
+  visited:  { label: "Посещал",          color: "#9ccc12" },
+  planning: { label: "Планирую посетить", color: "#a55fce" },
+  want:     { label: "Хочу посетить",     color: "#6f6fe6" },
+  transit:  { label: "Был проездом",      color: "#ffa726" },
+  avoid:    { label: "Держусь подальше",  color: "#ff5252" },
+  none:     { label: "Не посещал",        color: "#a3a3a3" },
+};
+
+// Код страны (ISO 3166-1 alpha-2) → статус. Отредактируй под свою карту.
+const TRAVEL_DATA = {
+  ru: "lived",
+  tr: "visited", ae: "visited", th: "visited", ge: "visited", am: "visited", kz: "visited",
+  it: "planning", es: "planning", pt: "planning",
+  np: "want", jp: "want", is: "want", nz: "want", pe: "want",
+  de: "transit", qa: "transit",
+};
+
+const WORLD_COUNTRY_COUNT = 195;
+
 const grid = document.getElementById("postsGrid");
 const gridEmpty = document.getElementById("gridEmpty");
 const storiesScroller = document.getElementById("storiesScroller");
@@ -51,14 +73,26 @@ const goalsList = document.getElementById("goalsList");
 const mylifeSection = document.getElementById("mylifeSection");
 const mylifeChart = document.getElementById("mylifeChart");
 const mylifeList = document.getElementById("mylifeList");
+const travelSection = document.getElementById("travelSection");
+const travelStats = document.getElementById("travelStats");
+const travelMap = document.getElementById("travelMap");
+const travelLegend = document.getElementById("travelLegend");
+const travelTooltip = document.getElementById("travelTooltip");
 
 function renderStories() {
   storiesScroller.innerHTML = STORIES.map(s => `
-    <div class="story">
+    <div class="story${s.tab ? " story--clickable" : ""}" ${s.tab ? `data-tab="${s.tab}"` : ""}>
       <div class="story__avatar"><span>${s.emoji}</span></div>
       <div class="story__label">${s.label}</div>
     </div>
   `).join("");
+
+  storiesScroller.querySelectorAll(".story--clickable").forEach(el => {
+    el.addEventListener("click", () => {
+      const tabButton = document.querySelector(`.tabs__item[data-tab="${el.dataset.tab}"]`);
+      if (tabButton) tabButton.click();
+    });
+  });
 }
 
 function multiIcon() {
@@ -189,6 +223,58 @@ function renderLifeWheel() {
   `).join("");
 }
 
+let travelInitialized = false;
+
+function renderTravel() {
+  if (travelInitialized) return;
+  travelInitialized = true;
+
+  travelMap.innerHTML = `<svg viewBox="0 0 1010 666" xmlns="http://www.w3.org/2000/svg">${WORLD_MAP_PATHS}</svg>`;
+
+  const paths = travelMap.querySelectorAll("path");
+  let visitedCount = 0;
+  let wantCount = 0;
+
+  paths.forEach(path => {
+    const status = TRAVEL_DATA[path.id] || "none";
+    path.classList.add(`travel-status--${status}`);
+    if (status === "lived" || status === "visited") visitedCount++;
+    if (status === "want") wantCount++;
+
+    path.addEventListener("click", e => {
+      e.stopPropagation();
+      showTravelTooltip(path);
+    });
+  });
+
+  document.addEventListener("click", () => { travelTooltip.hidden = true; });
+
+  const percent = Math.round((visitedCount / WORLD_COUNTRY_COUNT) * 100);
+  travelStats.innerHTML = `
+    <div class="travel__stat"><strong>${visitedCount}</strong><span>стран посещено</span></div>
+    <div class="travel__stat"><strong>${percent}%</strong><span>от всего мира</span></div>
+    <div class="travel__stat"><strong>${wantCount}</strong><span>хочу посетить</span></div>
+  `;
+
+  travelLegend.innerHTML = Object.values(TRAVEL_STATUSES).map(s => `
+    <li><span class="travel__legend-dot" style="background:${s.color}"></span>${s.label}</li>
+  `).join("");
+}
+
+function showTravelTooltip(path) {
+  const status = TRAVEL_DATA[path.id] || "none";
+  const name = path.getAttribute("aria-label") || path.id.toUpperCase();
+  const info = TRAVEL_STATUSES[status];
+
+  travelTooltip.innerHTML = `<strong>${name}</strong><span style="color:${info.color}">${info.label}</span>`;
+
+  const wrapRect = travelMap.parentElement.getBoundingClientRect();
+  const pathRect = path.getBoundingClientRect();
+  travelTooltip.style.left = (pathRect.left + pathRect.width / 2 - wrapRect.left) + "px";
+  travelTooltip.style.top = (pathRect.top - wrapRect.top) + "px";
+  travelTooltip.hidden = false;
+}
+
 // Modal
 const modal = document.getElementById("postModal");
 const modalMedia = document.getElementById("modalMedia");
@@ -236,6 +322,7 @@ document.querySelectorAll(".tabs__item").forEach(tab => {
     grid.hidden = kind !== "posts";
     goalsSection.hidden = kind !== "goals";
     mylifeSection.hidden = kind !== "mylife";
+    travelSection.hidden = kind !== "travel";
 
     if (kind === "posts") {
       renderPosts();
@@ -245,6 +332,9 @@ document.querySelectorAll(".tabs__item").forEach(tab => {
       gridEmpty.hidden = true;
     } else if (kind === "mylife") {
       renderLifeWheel();
+      gridEmpty.hidden = true;
+    } else if (kind === "travel") {
+      renderTravel();
       gridEmpty.hidden = true;
     } else {
       grid.innerHTML = "";
