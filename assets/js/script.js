@@ -13,7 +13,7 @@ const POSTS = [
 ];
 
 const STORIES = [
-  { label: "Работа", emoji: "💻" },
+  { label: "Бизнес", emoji: "💻" },
   { label: "Путешествия", emoji: "✈️", tab: "travel" },
   { label: "Кофе", emoji: "☕" },
   { label: "Друзья", emoji: "👥" },
