@@ -105,10 +105,7 @@ function renderStories() {
   `).join("");
 
   storiesScroller.querySelectorAll(".story--clickable").forEach(el => {
-    el.addEventListener("click", () => {
-      const tabButton = document.querySelector(`.tabs__item[data-tab="${el.dataset.tab}"]`);
-      if (tabButton) tabButton.click();
-    });
+    el.addEventListener("click", () => activateSection(el.dataset.tab));
   });
 }
 
@@ -381,36 +378,37 @@ const EMPTY_MESSAGES = {
   tagged: "Пока нет отметок",
 };
 
+function activateSection(kind) {
+  document.querySelectorAll(".tabs__item").forEach(t => t.classList.remove("is-active"));
+  const tabButton = document.querySelector(`.tabs__item[data-tab="${kind}"]`);
+  if (tabButton) tabButton.classList.add("is-active");
+
+  grid.hidden = kind !== "posts";
+  goalsSection.hidden = kind !== "goals";
+  mylifeSection.hidden = kind !== "mylife";
+  travelSection.hidden = kind !== "travel";
+
+  if (kind === "posts") {
+    renderPosts();
+    gridEmpty.hidden = POSTS.length > 0;
+  } else if (kind === "goals") {
+    renderGoals();
+    gridEmpty.hidden = true;
+  } else if (kind === "mylife") {
+    renderLifeWheel();
+    gridEmpty.hidden = true;
+  } else if (kind === "travel") {
+    renderTravel();
+    gridEmpty.hidden = true;
+  } else {
+    grid.innerHTML = "";
+    gridEmpty.textContent = EMPTY_MESSAGES[kind];
+    gridEmpty.hidden = false;
+  }
+}
+
 document.querySelectorAll(".tabs__item").forEach(tab => {
-  tab.addEventListener("click", () => {
-    document.querySelectorAll(".tabs__item").forEach(t => t.classList.remove("is-active"));
-    tab.classList.add("is-active");
-
-    const kind = tab.dataset.tab;
-
-    grid.hidden = kind !== "posts";
-    goalsSection.hidden = kind !== "goals";
-    mylifeSection.hidden = kind !== "mylife";
-    travelSection.hidden = kind !== "travel";
-
-    if (kind === "posts") {
-      renderPosts();
-      gridEmpty.hidden = POSTS.length > 0;
-    } else if (kind === "goals") {
-      renderGoals();
-      gridEmpty.hidden = true;
-    } else if (kind === "mylife") {
-      renderLifeWheel();
-      gridEmpty.hidden = true;
-    } else if (kind === "travel") {
-      renderTravel();
-      gridEmpty.hidden = true;
-    } else {
-      grid.innerHTML = "";
-      gridEmpty.textContent = EMPTY_MESSAGES[kind];
-      gridEmpty.hidden = false;
-    }
-  });
+  tab.addEventListener("click", () => activateSection(tab.dataset.tab));
 });
 
 renderStories();
