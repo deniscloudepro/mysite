@@ -82,6 +82,10 @@
       <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 17a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-11a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
       ЦЕЛИ
     </button>
+    <button class="tabs__item" data-tab="mylife">
+      <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M12 2l2.2 6.8H21l-5.6 4.2 2.1 6.8-5.5-4.1-5.5 4.1 2.1-6.8L3 8.8h6.8z"/></svg>
+      MY LIFE
+    </button>
   </nav>
 
   <section class="grid" id="postsGrid"></section>
@@ -89,6 +93,14 @@
 
   <section class="goals" id="goalsSection" hidden>
     <div class="goals__list" id="goalsList"></div>
+  </section>
+
+  <section class="mylife" id="mylifeSection" hidden>
+    <p class="mylife__subtitle">Колесо баланса — насколько ты доволен каждой сферой жизни сейчас (1–10)</p>
+    <div class="mylife__body">
+      <div class="mylife__chart" id="mylifeChart"></div>
+      <ul class="mylife__list" id="mylifeList"></ul>
+    </div>
   </section>
 
 </main>

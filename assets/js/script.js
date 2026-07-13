@@ -30,12 +30,27 @@ const GOALS = [
   { emoji: "🏔️", title: "Покорить треккинг в Гималаях", progress: 10, deadline: "2027" },
 ];
 
+// score: 1-10 для каждой сферы жизни. Отредактируй под себя.
+const LIFE_AREAS = [
+  { label: "Здоровье", score: 7 },
+  { label: "Карьера", score: 8 },
+  { label: "Финансы", score: 6 },
+  { label: "Отношения", score: 7 },
+  { label: "Рост", score: 8 },
+  { label: "Отдых", score: 5 },
+  { label: "Семья", score: 9 },
+  { label: "Окружение", score: 7 },
+];
+
 const grid = document.getElementById("postsGrid");
 const gridEmpty = document.getElementById("gridEmpty");
 const storiesScroller = document.getElementById("storiesScroller");
 const postsCount = document.getElementById("postsCount");
 const goalsSection = document.getElementById("goalsSection");
 const goalsList = document.getElementById("goalsList");
+const mylifeSection = document.getElementById("mylifeSection");
+const mylifeChart = document.getElementById("mylifeChart");
+const mylifeList = document.getElementById("mylifeList");
 
 function renderStories() {
   storiesScroller.innerHTML = STORIES.map(s => `
@@ -109,6 +124,71 @@ function renderGoals() {
   }).join("");
 }
 
+function renderLifeWheel() {
+  const n = LIFE_AREAS.length;
+  const size = 440;
+  const cx = size / 2;
+  const cy = size / 2;
+  const maxR = 140;
+  const maxScore = 10;
+  const ringSteps = [0.25, 0.5, 0.75, 1];
+
+  const angleAt = i => -Math.PI / 2 + i * (2 * Math.PI / n);
+  const pointAt = (i, r) => {
+    const a = angleAt(i);
+    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+  };
+
+  const rings = ringSteps.map(step =>
+    `<circle class="mylife__ring" cx="${cx}" cy="${cy}" r="${maxR * step}"></circle>`
+  ).join("");
+
+  const spokes = LIFE_AREAS.map((_, i) => {
+    const p = pointAt(i, maxR);
+    return `<line class="mylife__spoke" x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}"></line>`;
+  }).join("");
+
+  const areaPoints = LIFE_AREAS.map((area, i) => {
+    const p = pointAt(i, (area.score / maxScore) * maxR);
+    return `${p.x},${p.y}`;
+  }).join(" ");
+
+  const dots = LIFE_AREAS.map((area, i) => {
+    const p = pointAt(i, (area.score / maxScore) * maxR);
+    return `<circle class="mylife__dot" cx="${p.x}" cy="${p.y}" r="4"></circle>`;
+  }).join("");
+
+  const valueLabels = LIFE_AREAS.map((area, i) => {
+    const p = pointAt(i, (area.score / maxScore) * maxR + 16);
+    return `<text class="mylife__value-label" x="${p.x}" y="${p.y}" dy="4">${area.score}</text>`;
+  }).join("");
+
+  const axisLabels = LIFE_AREAS.map((area, i) => {
+    const p = pointAt(i, maxR + 34);
+    const sinA = Math.sin(angleAt(i));
+    const dy = sinA < -0.5 ? -4 : sinA > 0.5 ? 12 : 4;
+    return `<text class="mylife__axis-label" x="${p.x}" y="${p.y}" dy="${dy}">${area.label}</text>`;
+  }).join("");
+
+  mylifeChart.innerHTML = `
+    <svg viewBox="0 0 ${size} ${size}" role="img" aria-label="Колесо баланса">
+      ${rings}
+      ${spokes}
+      <polygon class="mylife__area" points="${areaPoints}"></polygon>
+      ${dots}
+      ${valueLabels}
+      ${axisLabels}
+    </svg>
+  `;
+
+  mylifeList.innerHTML = LIFE_AREAS.map(area => `
+    <li>
+      <span>${area.label}</span>
+      <span class="mylife__list-score">${area.score}/10</span>
+    </li>
+  `).join("");
+}
+
 // Modal
 const modal = document.getElementById("postModal");
 const modalMedia = document.getElementById("modalMedia");
@@ -155,12 +235,16 @@ document.querySelectorAll(".tabs__item").forEach(tab => {
 
     grid.hidden = kind !== "posts";
     goalsSection.hidden = kind !== "goals";
+    mylifeSection.hidden = kind !== "mylife";
 
     if (kind === "posts") {
       renderPosts();
       gridEmpty.hidden = POSTS.length > 0;
     } else if (kind === "goals") {
       renderGoals();
+      gridEmpty.hidden = true;
+    } else if (kind === "mylife") {
+      renderLifeWheel();
       gridEmpty.hidden = true;
     } else {
       grid.innerHTML = "";
