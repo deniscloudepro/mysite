@@ -20,10 +20,21 @@ const STORIES = [
   { label: "Спорт", emoji: "🏃" },
 ];
 
+// progress: 0-100. Отредактируй список под свои цели.
+const GOALS = [
+  { emoji: "💻", title: "Запустить личный сайт", progress: 100, deadline: "Июль 2026" },
+  { emoji: "📚", title: "Прочитать 12 книг за год", progress: 40, deadline: "Декабрь 2026" },
+  { emoji: "🏃", title: "Пробежать полумарафон", progress: 25, deadline: "Октябрь 2026" },
+  { emoji: "🌍", title: "Съездить в 3 новые страны", progress: 60, deadline: "2026" },
+  { emoji: "💰", title: "Собрать финансовую подушку", progress: 70, deadline: "Ноябрь 2026" },
+];
+
 const grid = document.getElementById("postsGrid");
 const gridEmpty = document.getElementById("gridEmpty");
 const storiesScroller = document.getElementById("storiesScroller");
 const postsCount = document.getElementById("postsCount");
+const goalsSection = document.getElementById("goalsSection");
+const goalsList = document.getElementById("goalsList");
 
 function renderStories() {
   storiesScroller.innerHTML = STORIES.map(s => `
@@ -74,6 +85,29 @@ function renderPosts() {
   });
 }
 
+function renderGoals() {
+  goalsList.innerHTML = GOALS.map(goal => {
+    const done = goal.progress >= 100;
+    return `
+      <div class="goal-card">
+        <div class="goal-card__top">
+          <div class="goal-card__title"><span class="goal-card__emoji">${goal.emoji}</span>${goal.title}</div>
+          <span class="goal-card__status ${done ? "goal-card__status--done" : "goal-card__status--progress"}">
+            ${done ? "Готово" : goal.progress + "%"}
+          </span>
+        </div>
+        <div class="goal-card__bar">
+          <div class="goal-card__bar-fill" style="width:${goal.progress}%"></div>
+        </div>
+        <div class="goal-card__meta">
+          <span>${done ? "Достигнуто" : "В процессе"}</span>
+          <span>${goal.deadline}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
 // Modal
 const modal = document.getElementById("postModal");
 const modalMedia = document.getElementById("modalMedia");
@@ -117,9 +151,16 @@ document.querySelectorAll(".tabs__item").forEach(tab => {
     tab.classList.add("is-active");
 
     const kind = tab.dataset.tab;
+
+    grid.hidden = kind !== "posts";
+    goalsSection.hidden = kind !== "goals";
+
     if (kind === "posts") {
       renderPosts();
       gridEmpty.hidden = POSTS.length > 0;
+    } else if (kind === "goals") {
+      renderGoals();
+      gridEmpty.hidden = true;
     } else {
       grid.innerHTML = "";
       gridEmpty.textContent = EMPTY_MESSAGES[kind];

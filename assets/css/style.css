@@ -275,6 +275,9 @@ a { color: inherit; text-decoration: none; }
   gap: 4px;
   margin-top: 4px;
 }
+.grid[hidden] {
+  display: none;
+}
 .grid__empty {
   text-align: center;
   color: var(--text-secondary);
@@ -424,6 +427,75 @@ a { color: inherit; text-decoration: none; }
 }
 .modal__likes { font-weight: 600; color: var(--text); margin-bottom: 4px; }
 
+/* Goals */
+.goals__list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 4px 40px;
+}
+
+.goal-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  background: var(--surface);
+}
+
+.goal-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.goal-card__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.goal-card__emoji { font-size: 20px; }
+
+.goal-card__status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.goal-card__status--progress {
+  background: rgba(0, 149, 246, 0.12);
+  color: var(--accent);
+}
+.goal-card__status--done {
+  background: rgba(56, 176, 100, 0.14);
+  color: #2f9e4f;
+}
+
+.goal-card__bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--bg);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.goal-card__bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--gradient);
+}
+
+.goal-card__meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
 /* Bottom nav (mobile) */
 .bottomnav {
   display: none;
@@ -441,6 +513,8 @@ a { color: inherit; text-decoration: none; }
   .profile-header__avatar span { font-size: 32px; }
   .profile-header__stats { gap: 20px; font-size: 13px; }
   .profile-header__username { font-size: 16px; }
+  .tabs { gap: 12px; padding: 0 4px; }
+  .tabs__item { font-size: 10px; gap: 4px; }
   .grid { gap: 2px; }
   .modal__content { flex-direction: column; max-height: 90vh; overflow-y: auto; }
   .modal__side { border-left: none; border-top: 1px solid var(--border); }
