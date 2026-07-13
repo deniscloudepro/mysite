@@ -27,6 +27,7 @@ const GOALS = [
   { emoji: "🏃", title: "Пробежать полумарафон", progress: 25, deadline: "Октябрь 2026" },
   { emoji: "🌍", title: "Съездить в 3 новые страны", progress: 60, deadline: "2026" },
   { emoji: "💰", title: "Собрать финансовую подушку", progress: 70, deadline: "Ноябрь 2026" },
+  { emoji: "🏔️", title: "Покорить треккинг в Гималаях", progress: 10, deadline: "2027" },
 ];
 
 const grid = document.getElementById("postsGrid");
