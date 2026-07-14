@@ -30,6 +30,35 @@ const GOALS = [
   { emoji: "🏔️", title: "Покорить треккинг в Гималаях", progress: 10, deadline: "2027" },
 ];
 
+// Пункты бокового меню и их содержимое. Отредактируй текст под себя.
+const DRAWER_PAGES = [
+  {
+    key: "about",
+    label: "Обо мне",
+    body: "Привет! Меня зовут Денис — разработчик, люблю путешествия и хороший кофе.\n\nЭтот сайт — личная страница-визитка в стиле Instagram, где я собираю всё в одном месте: цели, колесо баланса и карту поездок.",
+  },
+  {
+    key: "path",
+    label: "Мой путь",
+    body: "Коротко о профессиональном и личном пути — учёба, первые проекты, ключевые решения и то, что привело меня туда, где я сейчас.\n\nОтредактируй этот раздел в DRAWER_PAGES в script.js.",
+  },
+  {
+    key: "timeline",
+    label: "Хронология",
+    body: "2023 — начал новый проект\n2024 — переехал в другой город\n2025 — первое большое путешествие\n2026 — запустил личный сайт\n\nДобавь свои даты и события.",
+  },
+  {
+    key: "hobbies",
+    label: "Хобби",
+    body: "💻 Программирование в свободное время\n🏔️ Треккинг и горы\n☕ Кофе и рецепты альтернативной заварки\n📚 Чтение нон-фикшна",
+  },
+  {
+    key: "music",
+    label: "Музыка",
+    body: "Плейлист для работы, плейлист для дороги и пара любимых альбомов — сюда можно добавить ссылки на Spotify/Яндекс.Музыку.",
+  },
+];
+
 // score: 1-10 для каждой сферы жизни. Отредактируй под себя.
 const LIFE_AREAS = [
   { label: "Здоровье", score: 7 },
@@ -367,8 +396,65 @@ function closeModal() {
 
 document.getElementById("modalClose").addEventListener("click", closeModal);
 document.getElementById("modalBackdrop").addEventListener("click", closeModal);
+
+// Drawer (side menu)
+const drawer = document.getElementById("drawer");
+const drawerList = document.getElementById("drawerList");
+const menuToggle = document.getElementById("menuToggle");
+
+drawerList.innerHTML = DRAWER_PAGES.map(page => `
+  <li><button type="button" data-page="${page.key}">${page.label}</button></li>
+`).join("");
+
+function openDrawer() {
+  drawer.hidden = false;
+  requestAnimationFrame(() => drawer.classList.add("is-open"));
+  document.body.style.overflow = "hidden";
+}
+
+function closeDrawer() {
+  drawer.classList.remove("is-open");
+  document.body.style.overflow = "";
+  setTimeout(() => { drawer.hidden = true; }, 250);
+}
+
+menuToggle.addEventListener("click", openDrawer);
+document.getElementById("drawerClose").addEventListener("click", closeDrawer);
+document.getElementById("drawerBackdrop").addEventListener("click", closeDrawer);
+drawerList.querySelectorAll("button[data-page]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    closeDrawer();
+    openPage(btn.dataset.page);
+  });
+});
+
+// Page modal (drawer section content)
+const pageModal = document.getElementById("pageModal");
+const pageModalTitle = document.getElementById("pageModalTitle");
+const pageModalBody = document.getElementById("pageModalBody");
+
+function openPage(key) {
+  const page = DRAWER_PAGES.find(p => p.key === key);
+  if (!page) return;
+  pageModalTitle.textContent = page.label;
+  pageModalBody.textContent = page.body;
+  pageModal.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
+function closePageModal() {
+  pageModal.hidden = true;
+  document.body.style.overflow = "";
+}
+
+document.getElementById("pageModalClose").addEventListener("click", closePageModal);
+document.getElementById("pageModalBackdrop").addEventListener("click", closePageModal);
+
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape" && !modal.hidden) closeModal();
+  if (e.key !== "Escape") return;
+  if (!modal.hidden) closeModal();
+  if (!pageModal.hidden) closePageModal();
+  if (drawer.classList.contains("is-open")) closeDrawer();
 });
 
 // Tabs

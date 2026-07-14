@@ -22,12 +22,36 @@
       <button title="Сообщения" aria-label="Сообщения">
         <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 2C6.48 2 2 6.02 2 11c0 2.61 1.28 4.94 3.29 6.53L4 22l4.72-1.51C10 20.82 11 21 12 21c5.52 0 10-4.02 10-9S17.52 2 12 2z"/></svg>
       </button>
-      <button title="Профиль" aria-label="Профиль" class="topbar__avatar">
-        <span>D</span>
+      <button title="Меню" aria-label="Открыть меню" class="topbar__menu-btn" id="menuToggle">
+        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg>
       </button>
     </nav>
   </div>
 </header>
+
+<div class="drawer" id="drawer" hidden>
+  <div class="drawer__backdrop" id="drawerBackdrop"></div>
+  <nav class="drawer__panel">
+    <div class="drawer__header">
+      <div class="drawer__avatar"><span>D</span></div>
+      <div class="drawer__who">
+        <div class="drawer__username">denis.cloudepro</div>
+        <div class="drawer__fullname">Денис</div>
+      </div>
+      <button class="drawer__close" id="drawerClose" aria-label="Закрыть меню">&times;</button>
+    </div>
+    <ul class="drawer__list" id="drawerList"></ul>
+  </nav>
+</div>
+
+<div class="page-modal" id="pageModal" hidden>
+  <div class="page-modal__backdrop" id="pageModalBackdrop"></div>
+  <div class="page-modal__content">
+    <button class="page-modal__close" id="pageModalClose" aria-label="Закрыть">&times;</button>
+    <h2 class="page-modal__title" id="pageModalTitle"></h2>
+    <div class="page-modal__body" id="pageModalBody"></div>
+  </div>
+</div>
 
 <main class="profile-page">
 
