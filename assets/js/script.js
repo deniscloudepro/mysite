@@ -13,12 +13,15 @@ const POSTS = [
 ];
 
 const STORIES = [
-  { label: "Бизнес", emoji: "💻" },
+  { label: "Бизнес", emoji: "💻", action: "business" },
   { label: "Путешествия", emoji: "✈️", tab: "travel" },
   { label: "Кофе", emoji: "☕" },
   { label: "Друзья", emoji: "👥" },
   { label: "Спорт", emoji: "🏃" },
 ];
+
+// Мои проекты — бренды, с которыми велась работа. Отредактируй под себя.
+const BUSINESS_PROJECTS = ["Parker", "Zippo", "Waterman", "Montblanc", "Moleskine"];
 
 // progress: 0-100. Отредактируй список под свои цели.
 const GOALS = [
@@ -126,15 +129,25 @@ function saveTravelData() {
 let travelData = loadTravelData();
 
 function renderStories() {
-  storiesScroller.innerHTML = STORIES.map(s => `
-    <div class="story${s.tab ? " story--clickable" : ""}" ${s.tab ? `data-tab="${s.tab}"` : ""}>
-      <div class="story__avatar"><span>${s.emoji}</span></div>
-      <div class="story__label">${s.label}</div>
-    </div>
-  `).join("");
+  storiesScroller.innerHTML = STORIES.map(s => {
+    const clickable = Boolean(s.tab || s.action);
+    const attrs = [
+      s.tab ? `data-tab="${s.tab}"` : "",
+      s.action ? `data-action="${s.action}"` : "",
+    ].join(" ");
+    return `
+      <div class="story${clickable ? " story--clickable" : ""}" ${attrs}>
+        <div class="story__avatar"><span>${s.emoji}</span></div>
+        <div class="story__label">${s.label}</div>
+      </div>
+    `;
+  }).join("");
 
   storiesScroller.querySelectorAll(".story--clickable").forEach(el => {
-    el.addEventListener("click", () => activateSection(el.dataset.tab));
+    el.addEventListener("click", () => {
+      if (el.dataset.tab) activateSection(el.dataset.tab);
+      else if (el.dataset.action === "business") openBusinessPage();
+    });
   });
 }
 
@@ -438,6 +451,18 @@ function openPage(key) {
   if (!page) return;
   pageModalTitle.textContent = page.label;
   pageModalBody.textContent = page.body;
+  pageModal.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
+function openBusinessPage() {
+  pageModalTitle.textContent = "Бизнес";
+  pageModalBody.innerHTML = `
+    <h3 class="page-modal__subtitle">Мои проекты</h3>
+    <ul class="page-modal__list">
+      ${BUSINESS_PROJECTS.map(name => `<li>${name}</li>`).join("")}
+    </ul>
+  `;
   pageModal.hidden = false;
   document.body.style.overflow = "hidden";
 }

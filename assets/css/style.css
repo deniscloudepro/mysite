@@ -568,6 +568,24 @@ a { color: inherit; text-decoration: none; }
   color: var(--text);
   white-space: pre-line;
 }
+.page-modal__subtitle {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.page-modal__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.page-modal__list li {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.page-modal__list li:last-child {
+  border-bottom: none;
+}
 
 /* Goals */
 .goals__list {
