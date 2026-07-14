@@ -15,9 +15,7 @@ const POSTS = [
 const STORIES = [
   { label: "Бизнес", emoji: "💻", action: "business" },
   { label: "Путешествия", emoji: "✈️", tab: "travel" },
-  { label: "Кофе", emoji: "☕" },
-  { label: "Друзья", emoji: "👥" },
-  { label: "Спорт", emoji: "🏃" },
+  { label: "Интересы", emoji: "🏃" },
 ];
 
 // Мои проекты — бренды, с которыми велась работа. Отредактируй под себя.
