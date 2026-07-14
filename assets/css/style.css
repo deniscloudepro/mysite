@@ -528,14 +528,67 @@ a { color: inherit; text-decoration: none; }
   background: var(--surface);
 }
 .business-card__logo {
-  width: 56px;
+  width: 100%;
   height: 56px;
-  border-radius: 50%;
-  background: var(--gradient);
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
+  padding: 4px 8px;
+  overflow: hidden;
+}
+.business-card__logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Стилизованные wordmark-логотипы (не официальная графика брендов) */
+.brand-logo {
+  font-size: 15px;
+  line-height: 1;
+  white-space: nowrap;
+}
+.brand-logo--parker {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #1a1a1a;
+}
+.brand-logo--zippo {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: #d0021b;
+}
+.brand-logo--waterman {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #0b3d91;
+}
+.brand-logo--montblanc {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+  color: #1a1a1a;
+}
+.brand-logo--montblanc::before {
+  content: "✻ ";
+}
+.brand-logo--moleskine {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 12px;
+  color: #1a1a1a;
 }
 .business-card__name {
   font-weight: 700;

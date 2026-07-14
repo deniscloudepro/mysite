@@ -19,12 +19,15 @@ const STORIES = [
 ];
 
 // Мои проекты — бренды, с которыми велась работа. Отредактируй под себя.
+// logoClass задаёт стилизованный wordmark (см. .brand-logo--* в style.css);
+// вместо него можно указать logoImage: "assets/images/logos/имя.png" — тогда
+// будет использована реальная картинка логотипа.
 const BUSINESS_PROJECTS = [
-  { name: "Parker", logo: "🖋️", businessType: "Письменные принадлежности", projectType: "Дистрибуция" },
-  { name: "Zippo", logo: "🔥", businessType: "Зажигалки", projectType: "Локализация бренда" },
-  { name: "Waterman", logo: "✒️", businessType: "Письменные принадлежности", projectType: "Маркетинг" },
-  { name: "Montblanc", logo: "🏔️", businessType: "Премиум-аксессуары", projectType: "Retail" },
-  { name: "Moleskine", logo: "📓", businessType: "Блокноты и канцелярия", projectType: "E-commerce" },
+  { name: "Parker", logoClass: "brand-logo--parker", businessType: "Письменные принадлежности", projectType: "Дистрибуция" },
+  { name: "Zippo", logoClass: "brand-logo--zippo", businessType: "Зажигалки", projectType: "Локализация бренда" },
+  { name: "Waterman", logoClass: "brand-logo--waterman", businessType: "Письменные принадлежности", projectType: "Маркетинг" },
+  { name: "Montblanc", logoClass: "brand-logo--montblanc", businessType: "Премиум-аксессуары", projectType: "Retail" },
+  { name: "Moleskine", logoClass: "brand-logo--moleskine", businessType: "Блокноты и канцелярия", projectType: "E-commerce" },
 ];
 
 // progress: 0-100. Отредактируй список под свои цели.
@@ -187,7 +190,12 @@ function renderPosts() {
 function renderBusiness() {
   businessGrid.innerHTML = BUSINESS_PROJECTS.map(project => `
     <div class="business-card">
-      <div class="business-card__logo">${project.logo}</div>
+      <div class="business-card__logo">
+        ${project.logoImage
+          ? `<img src="${project.logoImage}" alt="${project.name}">`
+          : `<span class="brand-logo ${project.logoClass || ""}">${project.name}</span>`
+        }
+      </div>
       <div class="business-card__name">${project.name}</div>
       <div class="business-card__tags">
         <span class="business-card__tag">${project.businessType}</span>
