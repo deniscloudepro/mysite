@@ -13,13 +13,19 @@ const POSTS = [
 ];
 
 const STORIES = [
-  { label: "Бизнес", emoji: "💻", action: "business" },
+  { label: "Бизнес", emoji: "💻", tab: "business" },
   { label: "Путешествия", emoji: "✈️", tab: "travel" },
   { label: "Интересы", emoji: "🏃" },
 ];
 
 // Мои проекты — бренды, с которыми велась работа. Отредактируй под себя.
-const BUSINESS_PROJECTS = ["Parker", "Zippo", "Waterman", "Montblanc", "Moleskine"];
+const BUSINESS_PROJECTS = [
+  { name: "Parker", logo: "🖋️", businessType: "Письменные принадлежности", projectType: "Дистрибуция" },
+  { name: "Zippo", logo: "🔥", businessType: "Зажигалки", projectType: "Локализация бренда" },
+  { name: "Waterman", logo: "✒️", businessType: "Письменные принадлежности", projectType: "Маркетинг" },
+  { name: "Montblanc", logo: "🏔️", businessType: "Премиум-аксессуары", projectType: "Retail" },
+  { name: "Moleskine", logo: "📓", businessType: "Блокноты и канцелярия", projectType: "E-commerce" },
+];
 
 // progress: 0-100. Отредактируй список под свои цели.
 const GOALS = [
@@ -108,6 +114,8 @@ const travelMap = document.getElementById("travelMap");
 const travelLegend = document.getElementById("travelLegend");
 const travelTooltip = document.getElementById("travelTooltip");
 const travelPopover = document.getElementById("travelPopover");
+const businessSection = document.getElementById("businessSection");
+const businessGrid = document.getElementById("businessGrid");
 
 const TRAVEL_STORAGE_KEY = "personalgram-travel-data";
 
@@ -126,25 +134,15 @@ function saveTravelData() {
 let travelData = loadTravelData();
 
 function renderStories() {
-  storiesScroller.innerHTML = STORIES.map(s => {
-    const clickable = Boolean(s.tab || s.action);
-    const attrs = [
-      s.tab ? `data-tab="${s.tab}"` : "",
-      s.action ? `data-action="${s.action}"` : "",
-    ].join(" ");
-    return `
-      <div class="story${clickable ? " story--clickable" : ""}" ${attrs}>
-        <div class="story__avatar"><span>${s.emoji}</span></div>
-        <div class="story__label">${s.label}</div>
-      </div>
-    `;
-  }).join("");
+  storiesScroller.innerHTML = STORIES.map(s => `
+    <div class="story${s.tab ? " story--clickable" : ""}" ${s.tab ? `data-tab="${s.tab}"` : ""}>
+      <div class="story__avatar"><span>${s.emoji}</span></div>
+      <div class="story__label">${s.label}</div>
+    </div>
+  `).join("");
 
   storiesScroller.querySelectorAll(".story--clickable").forEach(el => {
-    el.addEventListener("click", () => {
-      if (el.dataset.tab) activateSection(el.dataset.tab);
-      else if (el.dataset.action === "business") openBusinessPage();
-    });
+    el.addEventListener("click", () => activateSection(el.dataset.tab));
   });
 }
 
@@ -184,6 +182,19 @@ function renderPosts() {
   grid.querySelectorAll(".post").forEach(el => {
     el.addEventListener("click", () => openModal(Number(el.dataset.index)));
   });
+}
+
+function renderBusiness() {
+  businessGrid.innerHTML = BUSINESS_PROJECTS.map(project => `
+    <div class="business-card">
+      <div class="business-card__logo">${project.logo}</div>
+      <div class="business-card__name">${project.name}</div>
+      <div class="business-card__tags">
+        <span class="business-card__tag">${project.businessType}</span>
+        <span class="business-card__tag">${project.projectType}</span>
+      </div>
+    </div>
+  `).join("");
 }
 
 function renderGoals() {
@@ -450,18 +461,6 @@ function openPage(key) {
   document.body.style.overflow = "hidden";
 }
 
-function openBusinessPage() {
-  pageModalTitle.textContent = "Бизнес";
-  pageModalBody.innerHTML = `
-    <h3 class="page-modal__subtitle">Мои проекты</h3>
-    <ul class="page-modal__list">
-      ${BUSINESS_PROJECTS.map(name => `<li>${name}</li>`).join("")}
-    </ul>
-  `;
-  pageModal.hidden = false;
-  document.body.style.overflow = "hidden";
-}
-
 function closePageModal() {
   pageModal.hidden = true;
   document.body.style.overflow = "";
@@ -493,6 +492,7 @@ function activateSection(kind) {
   goalsSection.hidden = kind !== "goals";
   mylifeSection.hidden = kind !== "mylife";
   travelSection.hidden = kind !== "travel";
+  businessSection.hidden = kind !== "business";
 
   if (kind === "posts") {
     renderPosts();
@@ -505,6 +505,9 @@ function activateSection(kind) {
     gridEmpty.hidden = true;
   } else if (kind === "travel") {
     renderTravel();
+    gridEmpty.hidden = true;
+  } else if (kind === "business") {
+    renderBusiness();
     gridEmpty.hidden = true;
   } else {
     grid.innerHTML = "";
