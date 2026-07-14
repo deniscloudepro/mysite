@@ -52,30 +52,10 @@ a { color: inherit; text-decoration: none; }
 }
 
 .topbar__logo {
-  font-family: "Brush Script MT", cursive, sans-serif;
-  font-size: 26px;
+  font-size: 19px;
   font-weight: 600;
 }
 .topbar__logo span { color: var(--accent); }
-
-.topbar__search {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg);
-  border-radius: 8px;
-  padding: 8px 12px;
-  color: var(--text-secondary);
-  flex: 0 1 260px;
-}
-.topbar__search input {
-  border: none;
-  background: none;
-  outline: none;
-  width: 100%;
-  font-size: 14px;
-  color: var(--text);
-}
 
 .topbar__icons {
   display: flex;
@@ -143,35 +123,6 @@ a { color: inherit; text-decoration: none; }
   font-weight: 300;
   margin: 0;
 }
-
-.profile-header__actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn {
-  padding: 7px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-}
-.btn--outline {
-  background: var(--surface);
-  border: 1px solid var(--border);
-}
-.btn--outline:hover { background: var(--bg); }
-.btn--icon { padding: 6px; display: flex; }
-
-.profile-header__stats {
-  display: flex;
-  gap: 40px;
-  list-style: none;
-  padding: 0;
-  margin: 0 0 20px;
-  font-size: 15px;
-}
-.profile-header__stats strong { font-weight: 600; }
 
 .profile-header__bio p {
   margin: 0 0 2px;
@@ -888,7 +839,6 @@ a { color: inherit; text-decoration: none; }
 
 /* Responsive */
 @media (max-width: 700px) {
-  .topbar__search { display: none; }
   .profile-header { gap: 20px; }
   .profile-header__avatar {
     flex-basis: 90px;
@@ -896,7 +846,6 @@ a { color: inherit; text-decoration: none; }
     height: 90px;
   }
   .profile-header__avatar span { font-size: 32px; }
-  .profile-header__stats { gap: 20px; font-size: 13px; }
   .profile-header__username { font-size: 16px; }
   .tabs { gap: 16px; padding: 0 12px; overflow-x: auto; justify-content: flex-start; }
   .tabs__item { font-size: 10px; gap: 4px; }

@@ -99,7 +99,6 @@ const WORLD_COUNTRY_COUNT = 195;
 const grid = document.getElementById("postsGrid");
 const gridEmpty = document.getElementById("gridEmpty");
 const storiesScroller = document.getElementById("storiesScroller");
-const postsCount = document.getElementById("postsCount");
 const goalsSection = document.getElementById("goalsSection");
 const goalsList = document.getElementById("goalsList");
 const mylifeSection = document.getElementById("mylifeSection");
@@ -165,8 +164,6 @@ function commentIcon() {
 }
 
 function renderPosts() {
-  postsCount.textContent = POSTS.length;
-
   if (POSTS.length === 0) {
     gridEmpty.hidden = false;
     return;
