@@ -541,3 +541,28 @@ document.querySelectorAll(".tabs__item").forEach(tab => {
 
 renderStories();
 renderPosts();
+
+// Дата рождения — отредактируй под себя, возраст пересчитывается сам.
+const BIRTH_DATE = new Date(1987, 9, 30);
+
+function pluralizeYears(n) {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod10 === 1 && mod100 !== 11) return "год";
+  if ([2, 3, 4].includes(mod10) && ![12, 13, 14].includes(mod100)) return "года";
+  return "лет";
+}
+
+function renderAge() {
+  const ageEl = document.getElementById("age");
+  if (!ageEl) return;
+  const today = new Date();
+  let age = today.getFullYear() - BIRTH_DATE.getFullYear();
+  const hadBirthdayThisYear =
+    today.getMonth() > BIRTH_DATE.getMonth() ||
+    (today.getMonth() === BIRTH_DATE.getMonth() && today.getDate() >= BIRTH_DATE.getDate());
+  if (!hadBirthdayThisYear) age--;
+  ageEl.textContent = `, ${age} ${pluralizeYears(age)}`;
+}
+
+renderAge();
