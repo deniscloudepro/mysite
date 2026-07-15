@@ -23,10 +23,10 @@ const STORIES = [
 // вместо него можно указать logoImage: "assets/images/logos/имя.png" — тогда
 // будет использована реальная картинка логотипа.
 const BUSINESS_PROJECTS = [
-  { name: "Parker", logoClass: "brand-logo--parker", businessType: "Письменные принадлежности", projectType: "Дистрибуция" },
+  { name: "Parker", logoImage: "assets/images/logos/parker.png", businessType: "Письменные принадлежности", projectType: "Дистрибуция" },
   { name: "Zippo", logoClass: "brand-logo--zippo", businessType: "Зажигалки", projectType: "Локализация бренда" },
   { name: "Waterman", logoClass: "brand-logo--waterman", businessType: "Письменные принадлежности", projectType: "Маркетинг" },
-  { name: "Montblanc", logoClass: "brand-logo--montblanc", businessType: "Премиум-аксессуары", projectType: "Retail" },
+  { name: "Montblanc", logoImage: "assets/images/logos/montblanc.png", businessType: "Премиум-аксессуары", projectType: "Retail" },
   { name: "Moleskine", logoClass: "brand-logo--moleskine", businessType: "Блокноты и канцелярия", projectType: "E-commerce" },
 ];
 
