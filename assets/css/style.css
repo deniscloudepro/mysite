@@ -78,6 +78,15 @@ a { color: inherit; text-decoration: none; }
   font-weight: 300;
   color: var(--text);
 }
+.profile-header__avatar img,
+.drawer__avatar img,
+.modal__avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
 
 .profile-header__info { flex: 1; padding-top: 10px; }
 
@@ -328,6 +337,7 @@ a { color: inherit; text-decoration: none; }
   height: 32px;
   border-radius: 50%;
   background: var(--gradient);
+  padding: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -395,6 +405,7 @@ a { color: inherit; text-decoration: none; }
   height: 44px;
   border-radius: 50%;
   background: var(--gradient);
+  padding: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
