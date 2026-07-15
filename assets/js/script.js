@@ -14,8 +14,21 @@ const POSTS = [
 
 const STORIES = [
   { label: "Обо мне", emoji: "🙂", page: "about" },
-  { label: "Бизнес", emoji: "💻", tab: "business" },
-  { label: "Путешествия", emoji: "✈️", tab: "travel" },
+  {
+    label: "Бизнес", emoji: "💻", context: "business",
+    subTabs: [
+      { key: "projects", label: "Проекты" },
+      { key: "history", label: "История" },
+      { key: "achievements", label: "Достижения" },
+    ],
+  },
+  {
+    label: "Путешествия", emoji: "✈️", context: "travel",
+    subTabs: [
+      { key: "countries", label: "Страны" },
+      { key: "cities", label: "Города" },
+    ],
+  },
   { label: "Интересы", emoji: "🏃" },
 ];
 
@@ -29,6 +42,31 @@ const BUSINESS_PROJECTS = [
   { name: "Waterman", logoClass: "brand-logo--waterman", businessType: "Письменные принадлежности", projectType: "Маркетинг" },
   { name: "Montblanc", logoImage: "assets/images/logos/montblanc.png", businessType: "Премиум-аксессуары", projectType: "Retail" },
   { name: "Moleskine", logoClass: "brand-logo--moleskine", businessType: "Блокноты и канцелярия", projectType: "E-commerce" },
+];
+
+// Города — вкладка «Путешествия → Города». Отредактируй под себя.
+const CITIES = [
+  { name: "Москва", country: "Россия" },
+  { name: "Стамбул", country: "Турция" },
+  { name: "Тбилиси", country: "Грузия" },
+  { name: "Дубай", country: "ОАЭ" },
+  { name: "Бангкок", country: "Таиланд" },
+  { name: "Алматы", country: "Казахстан" },
+];
+
+// История — вкладка «Бизнес → История». Отредактируй под себя.
+const BUSINESS_HISTORY = [
+  { year: "2015", text: "Начал первый бизнес-проект" },
+  { year: "2018", text: "Запустил сотрудничество с крупным брендом" },
+  { year: "2021", text: "Расширил портфель партнёров" },
+  { year: "2026", text: "Запустил личный сайт-визитку" },
+];
+
+// Достижения — вкладка «Бизнес → Достижения». Отредактируй под себя.
+const ACHIEVEMENTS = [
+  { emoji: "🏆", text: "Реализовал 10+ проектов с международными брендами" },
+  { emoji: "📈", text: "Вывел партнёрский бренд в топ продаж категории" },
+  { emoji: "🤝", text: "Построил долгосрочные партнёрства с производителями" },
 ];
 
 // progress: 0-100. Отредактируй список под свои цели.
@@ -120,6 +158,14 @@ const travelTooltip = document.getElementById("travelTooltip");
 const travelPopover = document.getElementById("travelPopover");
 const businessSection = document.getElementById("businessSection");
 const businessGrid = document.getElementById("businessGrid");
+const citiesSection = document.getElementById("citiesSection");
+const citiesList = document.getElementById("citiesList");
+const businessHistorySection = document.getElementById("businessHistorySection");
+const businessHistoryList = document.getElementById("businessHistoryList");
+const businessAchievementsSection = document.getElementById("businessAchievementsSection");
+const businessAchievementsList = document.getElementById("businessAchievementsList");
+const mainTabsNav = document.getElementById("mainTabs");
+const subTabsNav = document.getElementById("subTabs");
 
 const TRAVEL_STORAGE_KEY = "personalgram-travel-data";
 
@@ -138,10 +184,10 @@ function saveTravelData() {
 let travelData = loadTravelData();
 
 function renderStories() {
-  storiesScroller.innerHTML = STORIES.map(s => {
-    const clickable = Boolean(s.tab || s.page);
+  storiesScroller.innerHTML = STORIES.map((s, i) => {
+    const clickable = Boolean(s.context || s.page);
     const attrs = [
-      s.tab ? `data-tab="${s.tab}"` : "",
+      s.context ? `data-story-index="${i}"` : "",
       s.page ? `data-page="${s.page}"` : "",
     ].join(" ");
     return `
@@ -154,8 +200,16 @@ function renderStories() {
 
   storiesScroller.querySelectorAll(".story--clickable").forEach(el => {
     el.addEventListener("click", () => {
-      if (el.dataset.tab) activateSection(el.dataset.tab);
-      else if (el.dataset.page) openPage(el.dataset.page);
+      if (el.dataset.storyIndex !== undefined) {
+        const story = STORIES[Number(el.dataset.storyIndex)];
+        if (el.classList.contains("is-active")) {
+          resetToDefault();
+        } else {
+          activateContext(story, el);
+        }
+      } else if (el.dataset.page) {
+        openPage(el.dataset.page);
+      }
     });
   });
 }
@@ -213,6 +267,33 @@ function renderBusiness() {
         <span class="business-card__tag">${project.projectType}</span>
       </div>
     </div>
+  `).join("");
+}
+
+function renderCities() {
+  citiesList.innerHTML = CITIES.map(city => `
+    <li>
+      <span class="cities__name">${city.name}</span>
+      <span class="cities__country">${city.country}</span>
+    </li>
+  `).join("");
+}
+
+function renderBusinessHistory() {
+  businessHistoryList.innerHTML = BUSINESS_HISTORY.map(item => `
+    <li>
+      <span class="history__year">${item.year}</span>
+      <span class="history__text">${item.text}</span>
+    </li>
+  `).join("");
+}
+
+function renderAchievements() {
+  businessAchievementsList.innerHTML = ACHIEVEMENTS.map(item => `
+    <li>
+      <span class="achievements__emoji">${item.emoji}</span>
+      <span class="achievements__text">${item.text}</span>
+    </li>
   `).join("");
 }
 
@@ -502,40 +583,90 @@ const EMPTY_MESSAGES = {
   tagged: "Пока нет отметок",
 };
 
+const ALL_SECTIONS = [
+  grid, goalsSection, mylifeSection, travelSection, businessSection,
+  citiesSection, businessHistorySection, businessAchievementsSection,
+];
+
+function hideAllSections() {
+  ALL_SECTIONS.forEach(s => { s.hidden = true; });
+  gridEmpty.hidden = true;
+}
+
+// Контексты сторис: story.context → ключ под-вкладки → секция + функция рендера.
+const CONTEXTS = {
+  business: {
+    projects: { section: businessSection, render: renderBusiness },
+    history: { section: businessHistorySection, render: renderBusinessHistory },
+    achievements: { section: businessAchievementsSection, render: renderAchievements },
+  },
+  travel: {
+    countries: { section: travelSection, render: renderTravel },
+    cities: { section: citiesSection, render: renderCities },
+  },
+};
+
 function activateSection(kind) {
-  document.querySelectorAll(".tabs__item").forEach(t => t.classList.remove("is-active"));
-  const tabButton = document.querySelector(`.tabs__item[data-tab="${kind}"]`);
+  document.querySelectorAll("#mainTabs .tabs__item").forEach(t => t.classList.remove("is-active"));
+  const tabButton = document.querySelector(`#mainTabs .tabs__item[data-tab="${kind}"]`);
   if (tabButton) tabButton.classList.add("is-active");
 
-  grid.hidden = kind !== "posts";
-  goalsSection.hidden = kind !== "goals";
-  mylifeSection.hidden = kind !== "mylife";
-  travelSection.hidden = kind !== "travel";
-  businessSection.hidden = kind !== "business";
+  hideAllSections();
 
   if (kind === "posts") {
+    grid.hidden = false;
     renderPosts();
     gridEmpty.hidden = POSTS.length > 0;
   } else if (kind === "goals") {
+    goalsSection.hidden = false;
     renderGoals();
-    gridEmpty.hidden = true;
   } else if (kind === "mylife") {
+    mylifeSection.hidden = false;
     renderLifeWheel();
-    gridEmpty.hidden = true;
-  } else if (kind === "travel") {
-    renderTravel();
-    gridEmpty.hidden = true;
-  } else if (kind === "business") {
-    renderBusiness();
-    gridEmpty.hidden = true;
   } else {
-    grid.innerHTML = "";
     gridEmpty.textContent = EMPTY_MESSAGES[kind];
     gridEmpty.hidden = false;
   }
 }
 
-document.querySelectorAll(".tabs__item").forEach(tab => {
+function activateContext(story, storyEl) {
+  document.querySelectorAll(".story").forEach(el => el.classList.remove("is-active"));
+  storyEl.classList.add("is-active");
+
+  mainTabsNav.hidden = true;
+  subTabsNav.hidden = false;
+  subTabsNav.innerHTML = story.subTabs.map((t, i) => `
+    <button class="tabs__item${i === 0 ? " is-active" : ""}" data-subtab="${t.key}">${t.label}</button>
+  `).join("");
+
+  subTabsNav.querySelectorAll(".tabs__item").forEach(btn => {
+    btn.addEventListener("click", () => activateSubTab(story.context, btn.dataset.subtab));
+  });
+
+  activateSubTab(story.context, story.subTabs[0].key);
+}
+
+function activateSubTab(context, key) {
+  subTabsNav.querySelectorAll(".tabs__item").forEach(btn => {
+    btn.classList.toggle("is-active", btn.dataset.subtab === key);
+  });
+
+  hideAllSections();
+  const target = CONTEXTS[context] && CONTEXTS[context][key];
+  if (!target) return;
+  target.section.hidden = false;
+  target.render();
+}
+
+function resetToDefault() {
+  document.querySelectorAll(".story").forEach(el => el.classList.remove("is-active"));
+  subTabsNav.hidden = true;
+  subTabsNav.innerHTML = "";
+  mainTabsNav.hidden = false;
+  activateSection("posts");
+}
+
+document.querySelectorAll("#mainTabs .tabs__item").forEach(tab => {
   tab.addEventListener("click", () => activateSection(tab.dataset.tab));
 });
 

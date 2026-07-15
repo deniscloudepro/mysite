@@ -59,7 +59,7 @@
     <div class="stories__scroller" id="storiesScroller"></div>
   </section>
 
-  <nav class="tabs">
+  <nav class="tabs" id="mainTabs">
     <button class="tabs__item is-active" data-tab="posts">
       <svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>
       ПУБЛИКАЦИИ
@@ -81,6 +81,8 @@
       MY LIFE
     </button>
   </nav>
+
+  <nav class="tabs" id="subTabs" hidden></nav>
 
   <section class="grid" id="postsGrid"></section>
   <p class="grid__empty" id="gridEmpty" hidden>Здесь пока ничего нет</p>
@@ -107,8 +109,20 @@
     <ul class="travel__legend" id="travelLegend"></ul>
   </section>
 
+  <section class="cities" id="citiesSection" hidden>
+    <ul class="cities__list" id="citiesList"></ul>
+  </section>
+
   <section class="business" id="businessSection" hidden>
     <div class="business-grid" id="businessGrid"></div>
+  </section>
+
+  <section class="history" id="businessHistorySection" hidden>
+    <ul class="history__list" id="businessHistoryList"></ul>
+  </section>
+
+  <section class="achievements" id="businessAchievementsSection" hidden>
+    <ul class="achievements__list" id="businessAchievementsList"></ul>
   </section>
 
 </main>
