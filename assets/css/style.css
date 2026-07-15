@@ -885,6 +885,16 @@ a { color: inherit; text-decoration: none; }
   }
   .profile-header__avatar span { font-size: 32px; }
   .profile-header__username { font-size: 16px; }
+  .stories__scroller { gap: 12px; }
+  .story {
+    flex-basis: calc((100% - 4 * 12px) / 4.5);
+    width: auto;
+  }
+  .story__avatar {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
   .tabs { gap: 16px; padding: 0 12px; overflow-x: auto; justify-content: flex-start; }
   .tabs__item { font-size: 10px; gap: 4px; }
   .grid { gap: 2px; }
