@@ -409,7 +409,7 @@ function openModal(index) {
   modalMedia.innerHTML = post.image
     ? `<img src="${post.image}" alt="${post.caption}">`
     : `<div class="post__placeholder" style="background:${post.color}">${post.caption}</div>`;
-  modalCaption.innerHTML = `<strong>denis.cloudepro</strong> ${post.caption}`;
+  modalCaption.innerHTML = `<strong>Денис Иштуганов</strong> ${post.caption}`;
   modalLikes.textContent = post.likes;
   modalDate.textContent = post.date;
   modal.hidden = false;
