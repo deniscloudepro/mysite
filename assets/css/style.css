@@ -899,11 +899,6 @@ a { color: inherit; text-decoration: none; }
   flex: 0 0 auto;
 }
 
-/* Bottom nav (mobile) */
-.bottomnav {
-  display: none;
-}
-
 /* Responsive */
 @media (max-width: 700px) {
   .profile-header { gap: 20px; }
@@ -920,24 +915,4 @@ a { color: inherit; text-decoration: none; }
   .business-grid { grid-template-columns: repeat(2, 1fr); }
   .modal__content { flex-direction: column; max-height: 90vh; overflow-y: auto; }
   .modal__side { border-left: none; border-top: 1px solid var(--border); }
-  .bottomnav {
-    display: flex;
-    position: sticky;
-    bottom: 0;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    justify-content: space-around;
-    padding: 10px 0;
-  }
-  .bottomnav__avatar span {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: var(--gradient);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-  }
 }
