@@ -13,6 +13,7 @@ const POSTS = [
 ];
 
 const STORIES = [
+  { label: "Обо мне", emoji: "🙂", page: "about" },
   { label: "Бизнес", emoji: "💻", tab: "business" },
   { label: "Путешествия", emoji: "✈️", tab: "travel" },
   { label: "Интересы", emoji: "🏃" },
@@ -45,7 +46,7 @@ const DRAWER_PAGES = [
   {
     key: "about",
     label: "Обо мне",
-    body: "Привет! Меня зовут Денис — разработчик, люблю путешествия и хороший кофе.\n\nЭтот сайт — личная страница-визитка в стиле Instagram, где я собираю всё в одном месте: цели, колесо баланса и карту поездок.",
+    body: "Привет! Меня зовут Денис Иштуганов — разработчик, предприниматель, люблю путешествия и хороший кофе.\n\nЭтот сайт — личная страница-визитка в стиле Instagram, где я собираю всё в одном месте: цели, колесо баланса и карту поездок.",
   },
   {
     key: "path",
@@ -137,15 +138,25 @@ function saveTravelData() {
 let travelData = loadTravelData();
 
 function renderStories() {
-  storiesScroller.innerHTML = STORIES.map(s => `
-    <div class="story${s.tab ? " story--clickable" : ""}" ${s.tab ? `data-tab="${s.tab}"` : ""}>
-      <div class="story__avatar"><span>${s.emoji}</span></div>
-      <div class="story__label">${s.label}</div>
-    </div>
-  `).join("");
+  storiesScroller.innerHTML = STORIES.map(s => {
+    const clickable = Boolean(s.tab || s.page);
+    const attrs = [
+      s.tab ? `data-tab="${s.tab}"` : "",
+      s.page ? `data-page="${s.page}"` : "",
+    ].join(" ");
+    return `
+      <div class="story${clickable ? " story--clickable" : ""}" ${attrs}>
+        <div class="story__avatar"><span>${s.emoji}</span></div>
+        <div class="story__label">${s.label}</div>
+      </div>
+    `;
+  }).join("");
 
   storiesScroller.querySelectorAll(".story--clickable").forEach(el => {
-    el.addEventListener("click", () => activateSection(el.dataset.tab));
+    el.addEventListener("click", () => {
+      if (el.dataset.tab) activateSection(el.dataset.tab);
+      else if (el.dataset.page) openPage(el.dataset.page);
+    });
   });
 }
 
