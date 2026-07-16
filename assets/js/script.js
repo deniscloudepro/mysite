@@ -17,16 +17,16 @@ const STORIES = [
   {
     label: "Бизнес", emoji: "💻", context: "business",
     subTabs: [
-      { key: "projects", label: "Проекты" },
-      { key: "history", label: "История" },
-      { key: "achievements", label: "Достижения" },
+      { key: "projects", label: "Проекты", icon: '<path fill="currentColor" d="M20 6h-4V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2zM10 4h4v2h-4V4zm10 15H4V8h16v11z"/>' },
+      { key: "history", label: "История", icon: '<path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3.5 2" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' },
+      { key: "achievements", label: "Достижения", icon: '<path fill="currentColor" d="M12 2l2.2 6.8H21l-5.6 4.2 2.1 6.8-5.5-4.1-5.5 4.1 2.1-6.8L3 8.8h6.8z"/>' },
     ],
   },
   {
     label: "Путешествия", emoji: "✈️", context: "travel",
     subTabs: [
-      { key: "countries", label: "Страны" },
-      { key: "cities", label: "Города" },
+      { key: "countries", label: "Страны", icon: '<path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" stroke="currentColor" stroke-width="1.4" fill="none"/>' },
+      { key: "cities", label: "Города", icon: '<path fill="currentColor" d="M3 21V9h6v12H3zm8 0V5h6v16h-6z"/>' },
     ],
   },
   { label: "Интересы", emoji: "🏃" },
@@ -636,7 +636,10 @@ function activateContext(story, storyEl) {
   mainTabsNav.hidden = true;
   subTabsNav.hidden = false;
   subTabsNav.innerHTML = story.subTabs.map((t, i) => `
-    <button class="tabs__item${i === 0 ? " is-active" : ""}" data-subtab="${t.key}">${t.label}</button>
+    <button class="tabs__item${i === 0 ? " is-active" : ""}" data-subtab="${t.key}">
+      <svg viewBox="0 0 24 24" width="14" height="14">${t.icon}</svg>
+      ${t.label}
+    </button>
   `).join("");
 
   subTabsNav.querySelectorAll(".tabs__item").forEach(btn => {
