@@ -29,7 +29,13 @@ const STORIES = [
       { key: "cities", label: "Города", icon: '<path fill="currentColor" d="M3 21V9h6v12H3zm8 0V5h6v16h-6z"/>' },
     ],
   },
-  { label: "Интересы", emoji: "🏃" },
+  { label: "Интересы", emoji: "🏃", context: "interests" },
+];
+
+// Интересы — вкладка «Интересы», плитка как на главной. Отредактируй под себя.
+const INTERESTS = [
+  { color: "#4c68d7", emoji: "⛷️", label: "Горные лыжи" },
+  { color: "#20c997", emoji: "🧘", label: "Медитация" },
 ];
 
 // Мои проекты — бренды, с которыми велась работа. Отредактируй под себя.
@@ -164,6 +170,8 @@ const businessHistorySection = document.getElementById("businessHistorySection")
 const businessHistoryList = document.getElementById("businessHistoryList");
 const businessAchievementsSection = document.getElementById("businessAchievementsSection");
 const businessAchievementsList = document.getElementById("businessAchievementsList");
+const interestsSection = document.getElementById("interestsSection");
+const interestsGrid = document.getElementById("interestsGrid");
 const mainTabsNav = document.getElementById("mainTabs");
 const subTabsNav = document.getElementById("subTabs");
 
@@ -266,6 +274,15 @@ function renderBusiness() {
         <span class="business-card__tag">${project.businessType}</span>
         <span class="business-card__tag">${project.projectType}</span>
       </div>
+    </div>
+  `).join("");
+}
+
+function renderInterests() {
+  interestsGrid.innerHTML = INTERESTS.map(item => `
+    <div class="interest-tile" style="background:${item.color}">
+      <span class="interest-tile__emoji">${item.emoji}</span>
+      <span>${item.label}</span>
     </div>
   `).join("");
 }
@@ -586,6 +603,7 @@ const EMPTY_MESSAGES = {
 const ALL_SECTIONS = [
   grid, goalsSection, mylifeSection, travelSection, businessSection,
   citiesSection, businessHistorySection, businessAchievementsSection,
+  interestsSection,
 ];
 
 function hideAllSections() {
@@ -603,6 +621,9 @@ const CONTEXTS = {
   travel: {
     countries: { section: travelSection, render: renderTravel },
     cities: { section: citiesSection, render: renderCities },
+  },
+  interests: {
+    default: { section: interestsSection, render: renderInterests },
   },
 };
 
@@ -634,6 +655,14 @@ function activateContext(story, storyEl) {
   storyEl.classList.add("is-active");
 
   mainTabsNav.hidden = true;
+
+  if (!story.subTabs || story.subTabs.length === 0) {
+    subTabsNav.hidden = true;
+    subTabsNav.innerHTML = "";
+    activateSubTab(story.context, "default");
+    return;
+  }
+
   subTabsNav.hidden = false;
   subTabsNav.innerHTML = story.subTabs.map((t, i) => `
     <button class="tabs__item${i === 0 ? " is-active" : ""}" data-subtab="${t.key}">
