@@ -27,6 +27,7 @@ const STORIES = [
     subTabs: [
       { key: "countries", label: "Страны", icon: '<path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" stroke="currentColor" stroke-width="1.4" fill="none"/>' },
       { key: "cities", label: "Города", icon: '<path fill="currentColor" d="M3 21V9h6v12H3zm8 0V5h6v16h-6z"/>' },
+      { key: "want", label: "Хочу посетить", icon: '<path fill="currentColor" d="M12 21s-6.7-4.35-9.33-8.2C.86 10.1 1.4 6.6 4.2 5.1c2.2-1.2 4.6-.5 6 1.3l1.8 2.3 1.8-2.3c1.4-1.8 3.8-2.5 6-1.3 2.8 1.5 3.34 5 1.53 7.7C18.7 16.65 12 21 12 21z"/>' },
     ],
   },
   { label: "Интересы", emoji: "🏃", context: "interests" },
@@ -58,6 +59,16 @@ const CITIES = [
   { name: "Дубай", country: "ОАЭ" },
   { name: "Бангкок", country: "Таиланд" },
   { name: "Алматы", country: "Казахстан" },
+];
+
+// Хочу посетить — вкладка «Путешествия → Хочу посетить». Совпадает со
+// странами статуса "want" на карте (TRAVEL_DATA); отредактируй под себя.
+const WANT_TO_VISIT = [
+  { name: "Непал", note: "Треккинг в Гималаях" },
+  { name: "Япония", note: "" },
+  { name: "Исландия", note: "" },
+  { name: "Новая Зеландия", note: "" },
+  { name: "Перу", note: "" },
 ];
 
 // История — вкладка «Бизнес → История». Отредактируй под себя.
@@ -166,6 +177,8 @@ const businessSection = document.getElementById("businessSection");
 const businessGrid = document.getElementById("businessGrid");
 const citiesSection = document.getElementById("citiesSection");
 const citiesList = document.getElementById("citiesList");
+const wantSection = document.getElementById("wantSection");
+const wantList = document.getElementById("wantList");
 const businessHistorySection = document.getElementById("businessHistorySection");
 const businessHistoryList = document.getElementById("businessHistoryList");
 const businessAchievementsSection = document.getElementById("businessAchievementsSection");
@@ -292,6 +305,15 @@ function renderCities() {
     <li>
       <span class="cities__name">${city.name}</span>
       <span class="cities__country">${city.country}</span>
+    </li>
+  `).join("");
+}
+
+function renderWantToVisit() {
+  wantList.innerHTML = WANT_TO_VISIT.map(place => `
+    <li>
+      <span class="cities__name">${place.name}</span>
+      <span class="cities__country">${place.note || ""}</span>
     </li>
   `).join("");
 }
@@ -602,7 +624,7 @@ const EMPTY_MESSAGES = {
 
 const ALL_SECTIONS = [
   grid, goalsSection, mylifeSection, travelSection, businessSection,
-  citiesSection, businessHistorySection, businessAchievementsSection,
+  citiesSection, wantSection, businessHistorySection, businessAchievementsSection,
   interestsSection,
 ];
 
@@ -621,6 +643,7 @@ const CONTEXTS = {
   travel: {
     countries: { section: travelSection, render: renderTravel },
     cities: { section: citiesSection, render: renderCities },
+    want: { section: wantSection, render: renderWantToVisit },
   },
   interests: {
     default: { section: interestsSection, render: renderInterests },
