@@ -31,12 +31,21 @@ const STORIES = [
     ],
   },
   { label: "Интересы", emoji: "🏃", context: "interests" },
+  { label: "Друзья", emoji: "👥", context: "friends" },
 ];
 
 // Интересы — вкладка «Интересы», плитка как на главной. Отредактируй под себя.
 const INTERESTS = [
   { color: "#4c68d7", emoji: "⛷️", label: "Горные лыжи" },
   { color: "#20c997", emoji: "🧘", label: "Медитация" },
+];
+
+// Друзья — вкладка «Друзья», сетка кружочков. Отредактируй под себя.
+const FRIENDS = [
+  { name: "Алексей", initial: "А" },
+  { name: "Мария", initial: "М" },
+  { name: "Игорь", initial: "И" },
+  { name: "Ольга", initial: "О" },
 ];
 
 // Мои проекты — бренды, с которыми велась работа. Отредактируй под себя.
@@ -185,6 +194,8 @@ const businessAchievementsSection = document.getElementById("businessAchievement
 const businessAchievementsList = document.getElementById("businessAchievementsList");
 const interestsSection = document.getElementById("interestsSection");
 const interestsGrid = document.getElementById("interestsGrid");
+const friendsSection = document.getElementById("friendsSection");
+const friendsGrid = document.getElementById("friendsGrid");
 const mainTabsNav = document.getElementById("mainTabs");
 const subTabsNav = document.getElementById("subTabs");
 
@@ -296,6 +307,15 @@ function renderInterests() {
     <div class="interest-tile" style="background:${item.color}">
       <span class="interest-tile__emoji">${item.emoji}</span>
       <span>${item.label}</span>
+    </div>
+  `).join("");
+}
+
+function renderFriends() {
+  friendsGrid.innerHTML = FRIENDS.map(friend => `
+    <div class="friend-card">
+      <div class="friend-card__avatar"><span>${friend.initial}</span></div>
+      <div class="friend-card__name">${friend.name}</div>
     </div>
   `).join("");
 }
@@ -625,7 +645,7 @@ const EMPTY_MESSAGES = {
 const ALL_SECTIONS = [
   grid, goalsSection, mylifeSection, travelSection, businessSection,
   citiesSection, wantSection, businessHistorySection, businessAchievementsSection,
-  interestsSection,
+  interestsSection, friendsSection,
 ];
 
 function hideAllSections() {
@@ -647,6 +667,9 @@ const CONTEXTS = {
   },
   interests: {
     default: { section: interestsSection, render: renderInterests },
+  },
+  friends: {
+    default: { section: friendsSection, render: renderFriends },
   },
 };
 
